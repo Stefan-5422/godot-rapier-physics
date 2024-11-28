@@ -29,9 +29,11 @@ impl RapierSliderJoint3D {
         };
         let body_a_rid = body_a.get_base().get_rid();
         let body_b_rid = body_b.get_base().get_rid();
+        // Joints that try to connect a object to itself are invalid
         if body_a_rid == body_b_rid {
             return invalid_joint;
         }
+        // Check that both transforms are actually valid and within the same simulation space
         if !body_a.get_base().is_valid()
             || !body_b.get_base().is_valid()
             || body_a.get_base().get_space_id() != body_b.get_base().get_space_id()
@@ -40,12 +42,17 @@ impl RapierSliderJoint3D {
         }
         let rapier_anchor_a = vector_to_rapier(anchor_a.origin);
         let rapier_anchor_b = vector_to_rapier(anchor_b.origin);
+        //Calculate the Transform of the joint3D object
+        let joint_transform = body_a.get_base().get_transform() * anchor_a;
+        //Get the x axis of the Transform, this convention is set by the Godot3DPhysics engine
+        let axis = vector_to_rapier(joint_transform.basis.col_a());
         let space_handle = body_a.get_base().get_space_id();
         let space_id = body_a.get_base().get_space_id();
         let handle = physics_engine.joint_create_slider(
             space_handle,
             body_a.get_base().get_body_handle(),
             body_b.get_base().get_body_handle(),
+            axis,
             rapier_anchor_a,
             rapier_anchor_b,
             0.0,
