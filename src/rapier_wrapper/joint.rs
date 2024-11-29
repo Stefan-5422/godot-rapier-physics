@@ -147,6 +147,7 @@ impl PhysicsEngine {
         world_handle: WorldHandle,
         body_handle_1: RigidBodyHandle,
         body_handle_2: RigidBodyHandle,
+        axis: Vector<Real>,
         anchor_1: Vector<Real>,
         anchor_2: Vector<Real>,
         linear_limit_upper: f32,
