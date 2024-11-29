@@ -147,6 +147,7 @@ impl PhysicsEngine {
         world_handle: WorldHandle,
         body_handle_1: RigidBodyHandle,
         body_handle_2: RigidBodyHandle,
+        axis: Vector<Real>,
         anchor_1: Vector<Real>,
         anchor_2: Vector<Real>,
         linear_limit_upper: f32,
@@ -158,7 +159,6 @@ impl PhysicsEngine {
         self.body_wake_up(world_handle, body_handle_1, false);
         self.body_wake_up(world_handle, body_handle_2, false);
         if let Some(physics_world) = self.get_mut_world(world_handle) {
-            let axis = anchor_1 - anchor_2;
             let unit_axis = UnitVector::new_normalize(axis.normalize());
             let joint = PrismaticJointBuilder::new(unit_axis)
                 .local_anchor1(Point { coords: anchor_1 })
